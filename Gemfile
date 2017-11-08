@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'jruby-openssl', platforms: :jruby
 gem 'rake'
 gem 'yard'
+gem 'faraday'
 
 group :development do
   gem 'pry'
