@@ -198,24 +198,6 @@ module Twitter
           false
         end
       end
-
-      # Documentation Pending
-      def send_direct_message(message_data = {})
-        auth_header = Twitter::Headers.new(self, :post, 'https://api.twitter.com/1.1/direct_messages/events/new.json')
-
-        response = Faraday.post do |req|
-          req.url('https://api.twitter.com/1.1/direct_messages/events/new.json')
-          req.headers['Authorization'] = auth_header.oauth_auth_header.to_s
-          req.headers['Content-Type'] = 'application/json'
-          req.body = message_data.to_json
-        end
-
-        if response.success?
-          JSON.parse(response.body)['event']['id'] # Return twitter message id
-        else
-          false
-        end
-      end
       # YF Changes End
 
       alias d create_direct_message
