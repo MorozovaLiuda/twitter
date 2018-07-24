@@ -21,8 +21,6 @@ module Twitter
     object_attr_reader :Tweet, :retweeted_status
     object_attr_reader :Tweet, :quoted_status
     object_attr_reader :Tweet, :current_user_retweet
-    # 24.07.2018 LM changes, get extended_tweet for truncated tweets
-    # object_attr_reader :Tweet, :extended_tweet
     alias retweeted_tweet retweeted_status
     alias retweet? retweeted_status?
     alias retweeted_tweet? retweeted_status?

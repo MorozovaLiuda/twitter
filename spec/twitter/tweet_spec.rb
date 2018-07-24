@@ -103,10 +103,10 @@ describe Twitter::Tweet do
     end
 
     it 'returns the text of a Tweet without a user' do
-        tweet = Twitter::Tweet.new(id: 28_669_546_014, text: 'BOOSH', retweeted_status: {id: 28_561_922_517, text: 'BOOSH'})
-        expect(tweet.full_text).to be_a String
-        expect(tweet.full_text).to eq('BOOSH')
-      end
+      tweet = Twitter::Tweet.new(id: 28_669_546_014, text: 'BOOSH', retweeted_status: {id: 28_561_922_517, text: 'BOOSH'})
+      expect(tweet.full_text).to be_a String
+      expect(tweet.full_text).to eq('BOOSH')
+    end
 
     it 'returns the text of a Tweet without a user' do
       tweet = Twitter::Tweet.new(id: 28_669_546_014, text: 'BOOSH', retweeted_status: {id: 28_561_922_517, text: 'BOOSH'})
