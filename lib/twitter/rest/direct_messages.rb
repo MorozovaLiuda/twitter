@@ -9,8 +9,8 @@ require 'twitter/utils'
 module Twitter
   module REST
     module DirectMessages
-      include Twitter::REST::UploadUtils
       include Twitter::REST::Utils
+      include Twitter::REST::UploadUtils
       include Twitter::Utils
 
       # Returns all Direct Message events for the authenticated user (both sent and received) within the last 30 days. Sorted in reverse-chronological order.
