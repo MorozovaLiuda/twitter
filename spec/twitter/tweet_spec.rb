@@ -1,5 +1,4 @@
 require 'helper'
-
 describe Twitter::Tweet do
   before do
     @old_stderr = $stderr
@@ -87,21 +86,51 @@ describe Twitter::Tweet do
   end
 
   describe '#full_text' do
-    it 'returns the text of a Tweet' do
-      tweet = Twitter::Tweet.new(id: 28_669_546_014, text: 'BOOSH')
-      expect(tweet.full_text).to be_a String
-      expect(tweet.full_text).to eq('BOOSH')
+    context 'when truncated?' do
+      it 'returns the text of a Tweet' do
+        tweet = Twitter::Tweet.new(id: 28_669_546_014, text: "BOOSH...", truncated: true, extended_tweet: { full_text: 'BOOSH BOOSH' } )
+        expect(tweet.full_text).to be_a String
+        expect(tweet.full_text).to eq('BOOSH BOOSH')
+      end
     end
+
+    context 'when not truncated?' do
+      it 'returns the text of a Tweet' do
+        tweet = Twitter::Tweet.new(id: 28_669_546_014, text: 'BOOSH', truncated: false)
+        expect(tweet.full_text).to be_a String
+        expect(tweet.full_text).to eq('BOOSH')
+      end
+    end
+
+    it 'returns the text of a Tweet without a user' do
+        tweet = Twitter::Tweet.new(id: 28_669_546_014, text: 'BOOSH', retweeted_status: {id: 28_561_922_517, text: 'BOOSH'})
+        expect(tweet.full_text).to be_a String
+        expect(tweet.full_text).to eq('BOOSH')
+      end
+
     it 'returns the text of a Tweet without a user' do
       tweet = Twitter::Tweet.new(id: 28_669_546_014, text: 'BOOSH', retweeted_status: {id: 28_561_922_517, text: 'BOOSH'})
       expect(tweet.full_text).to be_a String
       expect(tweet.full_text).to eq('BOOSH')
     end
-    it 'returns the full text of a retweeted Tweet' do
-      tweet = Twitter::Tweet.new(id: 28_669_546_014, text: 'RT @sferik: BOOSH', retweeted_status: {id: 540_897_316_908_331_009, text: 'BOOSH'})
-      expect(tweet.full_text).to be_a String
-      expect(tweet.full_text).to eq('RT @sferik: BOOSH')
+
+    context 'when retweeted truncated?' do
+      it 'returns the full text of a retweeted Tweet' do
+        tweet = Twitter::Tweet.new(id: 28_669_546_014, text: 'RT @sferik: BOOSH...', retweeted_status: {id: 540_897_316_908_331_009, text: 'BOOSH...', truncated: true,
+                                   extended_tweet: { full_text: 'BOOSH BOOSH' }})
+        expect(tweet.full_text).to be_a String
+        expect(tweet.full_text).to eq('RT @sferik: BOOSH BOOSH')
+      end
     end
+
+    context 'when retweeted not truncated?' do
+      it 'returns the full text of a retweeted Tweet' do
+        tweet = Twitter::Tweet.new(id: 28_669_546_014, text: 'RT @sferik: BOOSH', retweeted_status: {id: 540_897_316_908_331_009, text: 'BOOSH'})
+        expect(tweet.full_text).to be_a String
+        expect(tweet.full_text).to eq('RT @sferik: BOOSH')
+      end
+    end
+
     it 'returns nil when retweeted_status is not set' do
       tweet = Twitter::Tweet.new(id: 28_669_546_014)
       expect(tweet.full_text).to be_nil

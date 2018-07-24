@@ -11,6 +11,8 @@ module Twitter
     # @return [Integer]
     attr_reader :favorite_count, :in_reply_to_status_id, :in_reply_to_user_id,
                 :quote_count, :reply_count, :retweet_count
+    # @return [Hash] 24.07.2018 LM changes
+    attr_reader :extended_tweet
     alias in_reply_to_tweet_id in_reply_to_status_id
     alias reply? in_reply_to_user_id?
     object_attr_reader :GeoFactory, :geo
@@ -19,6 +21,8 @@ module Twitter
     object_attr_reader :Tweet, :retweeted_status
     object_attr_reader :Tweet, :quoted_status
     object_attr_reader :Tweet, :current_user_retweet
+    # 24.07.2018 LM changes, get extended_tweet for truncated tweets
+    # object_attr_reader :Tweet, :extended_tweet
     alias retweeted_tweet retweeted_status
     alias retweet? retweeted_status?
     alias retweeted_tweet? retweeted_status?
@@ -31,12 +35,15 @@ module Twitter
 
     # @note May be > 280 characters.
     # @return [String]
+    # 24.07.2018 LM changes, check if tweet truncated and get extended_tweet
     def full_text
+      tweet_text = truncated? ? extended_tweet[:full_text] : text
       if retweet?
-        prefix = text[/\A(RT @[a-z0-9_]{1,20}: )/i, 1]
-        [prefix, retweeted_status.text].compact.join
+        prefix = tweet_text[/\A(RT @[a-z0-9_]{1,20}: )/i, 1]
+        retweet_text = retweeted_status.truncated? ? retweeted_status.extended_tweet[:full_text] : retweeted_status.text
+        [prefix, retweet_text].compact.join
       else
-        text
+        tweet_text
       end
     end
     memoize :full_text
