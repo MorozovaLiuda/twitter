@@ -173,9 +173,7 @@ module Twitter
       # YF Changes Start
       # Documentation Pending
       def private_media(media_url)
-        client = Twitter::REST::Client.new({ consumer_key: self.consumer_key, consumer_secret: self.consumer_secret,
-                                             token: self.access_token, token_secret: self.access_token_secret })
-        auth_header = Twitter::Headers.new(client, :get, media_url)
+        auth_header = Twitter::Headers.new(self, :get, media_url)
 
         response = Faraday.get do |req|
           req.url(media_url)
