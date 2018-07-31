@@ -6,8 +6,8 @@ require 'faraday'
 module Twitter
   module REST
     module Webhooks
-      def subscribe_to_webhooks
-        auth_header = Twitter::Headers.new(self, :post, 'https://api.twitter.com/1.1/account_activity/all/envlogicalware/subscriptions.json')
+      def subscribe_to_webhooks(env_name)
+        auth_header = Twitter::Headers.new(self, :post, "https://api.twitter.com/1.1/account_activity/all/#{env_name}/subscriptions.json")
 
         response = Faraday.post do |req|
           req.url('https://api.twitter.com/1.1/account_activity/all/envlogicalware/subscriptions.json')
@@ -17,8 +17,8 @@ module Twitter
         response.status == 204
       end
 
-      def unsubscribe_from_webhooks
-        auth_header = Twitter::Headers.new(self, :delete, 'https://api.twitter.com/1.1/account_activity/all/envlogicalware/subscriptions.json')
+      def unsubscribe_from_webhooks(env_name)
+        auth_header = Twitter::Headers.new(self, :delete, "https://api.twitter.com/1.1/account_activity/all/#{env_name}/subscriptions.json")
 
         response = Faraday.delete do |req|
           req.url('https://api.twitter.com/1.1/account_activity/all/envlogicalware/subscriptions.json')
