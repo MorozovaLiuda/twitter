@@ -11,7 +11,7 @@ module Twitter
 
         response = Faraday.post do |req|
           req.url("https://api.twitter.com/1.1/account_activity/all/#{env_name}/subscriptions.json")
-          req.headers['Authorization'] = headers
+          req.headers['Authorization'] = auth_header.oauth_auth_header.to_s
         end
 
         response.status == 204
